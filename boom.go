@@ -82,6 +82,7 @@ Options:
   -t  Timeout in ms.
   -A  HTTP Accept header.
   -d  HTTP request body.
+  -data-binnary HTTP request body read from binary data
   -T  Content-type, defaults to "text/html".
   -a  Basic authentication, username:password.
   -x  HTTP Proxy address as host:port.
