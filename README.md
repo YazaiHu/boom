@@ -10,7 +10,7 @@ Boom is originally written by Tarek Ziade in Python and is available on [tarekzi
 
 Simple as it takes to type the following command:
 
-    go get github.com/rakyll/boom
+    go get github.com/u2takey/boom
 
 ## Usage
 
@@ -33,6 +33,7 @@ Options:
   -t  Timeout in ms.
   -A  HTTP Accept header.
   -d  HTTP request body.
+  -data-binnary HTTP request body read from binary data
   -T  Content-type, defaults to "text/html".
   -a  Basic authentication, username:password.
   -x  HTTP Proxy address as host:port.
