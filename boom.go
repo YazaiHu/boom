@@ -17,6 +17,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	gourl "net/url"
 	"os"
@@ -48,6 +49,7 @@ var (
 	m           = flag.String("m", "GET", "")
 	headers     = flag.String("h", "", "")
 	body        = flag.String("d", "", "")
+	body_binary = flag.String("data-binary", "", "")
 	accept      = flag.String("A", "", "")
 	contentType = flag.String("T", "text/html", "")
 	authHeader  = flag.String("a", "", "")
@@ -169,9 +171,21 @@ func main() {
 		req.SetBasicAuth(username, password)
 	}
 
+	var requestBody interface{}
+	if *body_binary != "" && strings.HasPrefix(*body_binary, "@") {
+		filePath := (*body_binary)[1:]
+		requestBody, err = ioutil.ReadFile(filePath)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	} else {
+		requestBody = *body
+	}
+
 	(&boomer.Boomer{
 		Request:            req,
-		RequestBody:        *body,
+		RequestBody:        requestBody,
 		N:                  num,
 		C:                  conc,
 		Qps:                q,
