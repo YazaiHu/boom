@@ -25,7 +25,7 @@ import (
 	"runtime"
 	"strings"
 
-	"./boomer"
+	"github.com/u2takey/boom/boomer"
 )
 
 const (
