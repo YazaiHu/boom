@@ -69,6 +69,8 @@ type Boomer struct {
 	ProxyAddr *url.URL
 
 	results chan *result
+
+	OutFile *os.File
 }
 
 // Run makes all the requests, prints the summary. It blocks until
@@ -101,7 +103,12 @@ func (b *Boomer) makeRequest(c *http.Client) {
 	if err == nil {
 		size = resp.ContentLength
 		code = resp.StatusCode
-		io.Copy(ioutil.Discard, resp.Body)
+		if b.OutFile == nil {
+			io.Copy(ioutil.Discard, resp.Body)
+		} else {
+			io.Copy(b.OutFile, resp.Body)
+		}
+
 		resp.Body.Close()
 	}
 	b.results <- &result{

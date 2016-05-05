@@ -54,7 +54,8 @@ var (
 	contentType = flag.String("T", "text/html", "")
 	authHeader  = flag.String("a", "", "")
 
-	output = flag.String("o", "", "")
+	output     = flag.String("o", "", "")
+	outputFile = flag.String("O", "", "")
 
 	c    = flag.Int("c", 50, "")
 	n    = flag.Int("n", 200, "")
@@ -77,7 +78,7 @@ Options:
   -o  Output type. If none provided, a summary is printed.
       "csv" is the only supported alternative. Dumps the response
       metrics in comma-seperated values format.
-
+  -O  output file. If none provided, will drop output.
   -m  HTTP method, one of GET, POST, PUT, DELETE, HEAD, OPTIONS.
   -H  Custom HTTP header. You can specify as many as needed by repeating the flag.
       for example, -H "Accept: text/html" -H "Content-Type: application/xml" .
@@ -184,6 +185,15 @@ func main() {
 		requestBody = *body
 	}
 
+	var outfile *os.File = nil
+	if *outputFile != "" {
+		outfile, err = os.OpenFile(*outputFile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0600)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
+
 	(&boomer.Boomer{
 		Request:            req,
 		RequestBody:        requestBody,
@@ -195,6 +205,7 @@ func main() {
 		DisableKeepAlives:  *disableKeepAlives,
 		ProxyAddr:          proxyURL,
 		Output:             *output,
+		OutFile:            outfile,
 	}).Run()
 }
 
